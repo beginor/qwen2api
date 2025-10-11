@@ -1,6 +1,6 @@
 {
   "name": "qwen2api",
-  "version": "2025.10.01.08.45",
+  "version": "2025.10.11.15.10",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/start.js",

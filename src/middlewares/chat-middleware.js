@@ -16,7 +16,6 @@ const processRequestBody = async (req, res, next) => {
       "model": "qwen3-235b-a22b",
       "messages": [],
       "session_id": generateUUID(),
-      "chat_id": generateUUID(),
       "id": generateUUID(),
       "sub_chat_type": "t2t",
       "chat_mode": "normal"

@@ -27,10 +27,12 @@ const sendChatRequest = async (body) => {
         // 构建请求配置
         const requestConfig = {
             headers: {
-                'Authorization': `Bearer ${currentToken}`,
+                'authorization': `Bearer ${currentToken}`,
                 'Content-Type': 'application/json',
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                ...(config.ssxmodItna && { 'Cookie': `ssxmod_itna=${config.ssxmodItna}` })
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0', 
+                "Connection": "keep-alive",
+                "Accept": "*/*",
+                "Accept-Encoding": "gzip, deflate, br",
             },
             responseType: body.stream ? 'stream' : 'json',
             timeout: 60 * 1000,
@@ -39,7 +41,7 @@ const sendChatRequest = async (body) => {
         // console.log(body)
         // console.log(requestConfig)
 
-        const chat_id = await generateChatID(currentToken,body.model)
+        const chat_id = await generateChatID(currentToken, body.model)
 
         logger.network(`发送聊天请求`, 'REQUEST')
         const response = await axios.post("https://chat.qwen.ai/api/v2/chat/completions?chat_id=" + chat_id, {
@@ -49,7 +51,7 @@ const sendChatRequest = async (body) => {
 
         // 请求成功
         if (response.status === 200) {
-            // console.log(JSON.stringify(response.data))
+            // console.log(response.data)
             return {
                 currentToken: currentToken,
                 status: true,
@@ -72,7 +74,7 @@ const sendChatRequest = async (body) => {
  * @param {*} currentToken 
  * @returns {Promise<string|null>} 返回生成的chat_id，如果失败则返回null
  */
-const generateChatID = async (currentToken,model) => {
+const generateChatID = async (currentToken, model) => {
     try {
         const response_data = await axios.post("https://chat.qwen.ai/api/v2/chats/new", {
             "title": "New Chat",
@@ -86,11 +88,15 @@ const generateChatID = async (currentToken,model) => {
             headers: {
                 'Authorization': `Bearer ${currentToken}`,
                 'Content-Type': 'application/json',
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36',
-                ...(config.ssxmodItna && { 'Cookie': `ssxmod_itna=${config.ssxmodItna}` })
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/141.0.0.0 Safari/537.36 Edg/141.0.0.0', 
+                "Connection": "keep-alive",
+                "Accept": "*/*",
+                "Accept-Encoding": "gzip, deflate, br"
             }
         })
 
+        // console.log(response_data.data)
+        
         return response_data.data?.data?.id || null
 
     } catch (error) {
